@@ -59,12 +59,18 @@ export const categoriesAPI = {
   },
 
   create: async (payload: any) => {
-    const { data } = await axiosInstance.post('/category/add', payload)
+    const isFormData = payload instanceof FormData
+    const { data } = await axiosInstance.post('/category/add', payload, {
+      headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : undefined,
+    })
     return data?.data ?? data
   },
 
   update: async (id: string, payload: any) => {
-    const { data } = await axiosInstance.put(`/category/${id}`, payload)
+    const isFormData = payload instanceof FormData
+    const { data } = await axiosInstance.put(`/category/${id}`, payload, {
+      headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : undefined,
+    })
     return data?.data ?? data
   },
 
