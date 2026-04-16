@@ -15,6 +15,7 @@ import {
   Settings,
   LogOut,
   X,
+  Sparkles,
 } from "lucide-react";
 import { LogoutModal } from "./LogoutModal";
 import { signOut } from "next-auth/react";
@@ -28,6 +29,7 @@ const navigation = [
   { name: "Seller Profile Request", href: "/dashboard/seller-request", icon: UserPlus },
   { name: "Buyer Profile", href: "/dashboard/buyer-profile", icon: ShoppingBag },
   { name: "Subscription", href: "/dashboard/subscription", icon: CreditCard },
+  { name: "Onboarding", href: "/dashboard/onboarding", icon: Sparkles },
   { name: "Setting", href: "/dashboard/setting", icon: Settings },
 ];
 
