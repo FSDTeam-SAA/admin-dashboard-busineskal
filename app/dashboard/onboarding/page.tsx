@@ -166,14 +166,6 @@ export default function OnboardingPage() {
                         >
                           <Edit2 className="w-4 h-4" />
                         </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-red-600 hover:bg-red-50"
-                          onClick={() => handleOpenDelete(item)}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
                       </TableCell>
                     </TableRow>
                   ))
