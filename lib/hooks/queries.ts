@@ -7,6 +7,7 @@ import {
   sellersAPI,
   buyersAPI,
   bannerAdsAPI,
+  countriesAPI,
   subscriptionsAPI,
   PaginationParams,
 } from '../api-client'
@@ -189,6 +190,43 @@ export const useDeleteBannerMutation = () => {
     },
     onError: () => {
       toast.error('Failed to delete banner')
+    },
+  })
+}
+
+// Countries Queries
+export const useCountriesQuery = (params: PaginationParams) => {
+  return useQuery({
+    queryKey: ['countries', params],
+    queryFn: () => countriesAPI.list(params),
+  })
+}
+
+export const useCountryMutation = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, payload }: { id?: string; payload: FormData }) =>
+      id ? countriesAPI.update(id, payload) : countriesAPI.create(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['countries'] })
+      toast.success('Country saved successfully')
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || 'Failed to save country')
+    },
+  })
+}
+
+export const useDeleteCountryMutation = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => countriesAPI.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['countries'] })
+      toast.success('Country deleted successfully')
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || 'Failed to delete country')
     },
   })
 }

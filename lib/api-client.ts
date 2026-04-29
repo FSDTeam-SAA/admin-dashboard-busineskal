@@ -19,6 +19,12 @@ type ListResponse<T> = {
   total: number
 }
 
+type PaginatedListResponse<T> = ListResponse<T> & {
+  page: number
+  limit: number
+  totalPages: number
+}
+
 // Dashboard APIs
 export const dashboardAPI = {
   getOverview: async () => {
@@ -204,6 +210,49 @@ export const bannerAdsAPI = {
 
   delete: async (id: string) => {
     const { data } = await axiosInstance.delete(`/banner/${id}`)
+    return data?.data ?? data
+  },
+}
+
+// Countries APIs
+export const countriesAPI = {
+  list: async (params: PaginationParams): Promise<PaginatedListResponse<any>> => {
+    const { data } = await axiosInstance.get('/country', { params })
+    const payload = data?.data ?? {}
+    const items = (payload.countries ?? []).map((country: any) => ({
+      id: country._id,
+      name: country.name,
+      image: country.flag?.url ?? '',
+      date: country.createdAt,
+      raw: country,
+    }))
+    const pagination = payload.pagination ?? {}
+
+    return {
+      data: items,
+      total: pagination.total ?? items.length,
+      page: pagination.page ?? params.page,
+      limit: pagination.limit ?? params.limit,
+      totalPages: pagination.totalPages ?? 1,
+    }
+  },
+
+  create: async (payload: FormData) => {
+    const { data } = await axiosInstance.post('/country', payload, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    return data?.data ?? data
+  },
+
+  update: async (id: string, payload: FormData) => {
+    const { data } = await axiosInstance.put(`/country/${id}`, payload, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    return data?.data ?? data
+  },
+
+  delete: async (id: string) => {
+    const { data } = await axiosInstance.delete(`/country/${id}`)
     return data?.data ?? data
   },
 }
